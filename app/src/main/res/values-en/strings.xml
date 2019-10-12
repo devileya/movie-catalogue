@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Movie Catalogue</string>
+    <string name="movies">Movies</string>
+    <string name="tv_shows">TV Shows</string>
+    <string name="popularity">popularity</string>
+    <string name="rating">rating</string>
+    <string name="date">date</string>
+    <string name="change_language_settings">Change Language Settings</string>
+</resources>
