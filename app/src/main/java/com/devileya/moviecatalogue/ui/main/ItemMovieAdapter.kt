@@ -22,6 +22,7 @@ class ItemMovieAdapter(
         }
 
         override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+            holder.setIsRecyclable(false)
             holder.bindItem(context, movies[position], listener)
         }
 

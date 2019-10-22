@@ -22,6 +22,7 @@ class ItemTvAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+        holder.setIsRecyclable(false)
         holder.bindItem(context, tvShows[position], listener)
     }
 
