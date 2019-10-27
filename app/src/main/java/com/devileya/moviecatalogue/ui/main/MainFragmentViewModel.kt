@@ -27,7 +27,7 @@ class MainFragmentViewModel: ViewModel(), CoroutineScope {
     }
 
 
-    fun getMovieList() {
+    private fun getMovieList() {
         showLoading.value = true
         launch {
             try {
@@ -43,7 +43,7 @@ class MainFragmentViewModel: ViewModel(), CoroutineScope {
     }
 
 //    fun getTvShowList(): List<TvShowModel> = runBlocking { apiServices.getTvAsync(api_key).results }
-    fun getTvShowList() {
+    private fun getTvShowList() {
         showLoading.value = true
         launch {
             try {

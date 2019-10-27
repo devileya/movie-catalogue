@@ -100,5 +100,9 @@ class MainFragment : Fragment() {
                 showMovieList(it)
             })
         }
+
+        fragmentViewModel.showLoading.observe(this, Observer {
+            progress_bar.visibility = if (it) View.VISIBLE else View.GONE
+        })
     }
 }
