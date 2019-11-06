@@ -176,7 +176,7 @@
                     android:layout_height="20dp"
                     android:layout_marginTop="2dp"
                     android:src="@drawable/ic_heart"
-                    android:tint="@color/grey" />
+                    android:tint="@color/grey"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -235,5 +235,33 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progress_bar_detail"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:visibility="visible"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_50_horizontal"
+        app:layout_constraintRight_toRightOf="@id/guideline_50_horizontal"
+        app:layout_constraintTop_toTopOf="@id/guideline_50_vertical"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_50_vertical"
+        app:layout_constraintEnd_toEndOf="@id/guideline_50_horizontal"
+        app:layout_constraintStart_toStartOf="@id/guideline_50_horizontal"/>
+    <!-- Constraint Guideline-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_50_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_50_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.50" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

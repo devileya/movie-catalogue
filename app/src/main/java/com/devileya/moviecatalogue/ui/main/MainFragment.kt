@@ -1,12 +1,11 @@
 package com.devileya.moviecatalogue.ui.main
 
 import android.content.Intent
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.devileya.moviecatalogue.R
@@ -14,7 +13,10 @@ import com.devileya.moviecatalogue.network.model.DetailModel
 import com.devileya.moviecatalogue.network.model.MovieModel
 import com.devileya.moviecatalogue.network.model.TvShowModel
 import com.devileya.moviecatalogue.ui.detail.DetailActivity
+import com.devileya.moviecatalogue.utils.EspressoIdlingResource
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.main_fragment.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainFragment : Fragment() {
 
@@ -30,7 +32,7 @@ class MainFragment : Fragment() {
         }
     }
 
-    private lateinit var fragmentViewModel: MainFragmentViewModel
+    private val viewModel by viewModel<MainFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,11 +43,11 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        fragmentViewModel = ViewModelProviders.of(this).get(MainFragmentViewModel::class.java)
         initViewModel()
     }
 
     private fun showMovieList(movies: List<MovieModel>?) {
+        rv_movie.visibility = View.VISIBLE
         rv_movie.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = ItemMovieAdapter(context!!, movies!!){
@@ -68,6 +70,7 @@ class MainFragment : Fragment() {
     }
 
     private fun showTvList(tvShows: List<TvShowModel>?) {
+        rv_movie.visibility = View.VISIBLE
         rv_movie.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = ItemTvAdapter(context!!, tvShows!!){
@@ -90,19 +93,26 @@ class MainFragment : Fragment() {
     }
 
     private fun initViewModel() {
+        EspressoIdlingResource.increment()
         val category = arguments?.getString("category")
         if (category == context?.resources?.getString(R.string.tv_shows)) {
-            fragmentViewModel.tvShows.observe(this, Observer {
-                showTvList(it)
+            viewModel.tvShows.observe(this, Observer {
+                if (it.isNotEmpty()) showTvList(it) else tv_no_data.visibility = View.VISIBLE
+                EspressoIdlingResource.decrement()
             })
         } else {
-            fragmentViewModel.movies.observe(this, Observer {
-                showMovieList(it)
+            viewModel.movies.observe(this, Observer {
+                if (it.isNotEmpty()) showMovieList(it) else tv_no_data.visibility = View.VISIBLE
+                EspressoIdlingResource.decrement()
             })
         }
 
-        fragmentViewModel.showLoading.observe(this, Observer {
+        viewModel.showLoading.observe(this, Observer {
             progress_bar.visibility = if (it) View.VISIBLE else View.GONE
+        })
+
+        viewModel.showError.observe(this, Observer {
+            Snackbar.make(view!!, it, Snackbar.LENGTH_SHORT)
         })
     }
 }

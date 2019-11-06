@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         initViewPager()
     }
 
-    fun initViewPager(){
+    private fun initViewPager(){
         viewPagerMovieAdapter = ViewPagerMovieAdapter(supportFragmentManager, this)
         vp_movie_list.adapter = viewPagerMovieAdapter
 

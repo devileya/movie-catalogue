@@ -1,73 +1,76 @@
 package com.devileya.moviecatalogue.ui.main
 
-import androidx.lifecycle.MutableLiveData
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
+import com.devileya.moviecatalogue.domain.module.appModules
+import com.devileya.moviecatalogue.domain.repository.DataRepository
+import com.devileya.moviecatalogue.network.message.response.MovieResponse
+import com.devileya.moviecatalogue.network.message.response.TvShowResponse
 import com.devileya.moviecatalogue.network.model.MovieModel
 import com.devileya.moviecatalogue.network.model.TvShowModel
-import org.junit.Test
-
-import org.junit.Assert.*
+import com.devileya.moviecatalogue.utils.UseCaseResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.setMain
 import org.junit.Before
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
+import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
+import org.koin.test.AutoCloseKoinTest
+import org.koin.test.inject
+import org.mockito.Mock
+import org.mockito.Mockito
+import org.mockito.MockitoAnnotations
 
 /**
  * Created by Arif Fadly Siregar 2019-10-27.
  */
-class MainFragmentViewModelTest {
+@RunWith(JUnit4::class)
+class MainFragmentViewModelTest : AutoCloseKoinTest() {
+    private val viewModel: MainFragmentViewModel by inject()
+    private val dataRepository: DataRepository by inject()
+    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+    private var movies: List<MovieModel>? = null
+    private var tvShows: List<TvShowModel>? = null
 
-    private lateinit var viewModel: MainFragmentViewModel
-    private val dummyTvShows =  MutableLiveData<List<TvShowModel>>()
-    private val dummyMovies =  MutableLiveData<List<MovieModel>>()
-    private val showLoading = MutableLiveData<Boolean>()
+    @get:Rule
+    val rule = InstantTaskExecutorRule()
+
+    @Mock
+    lateinit var listMovieObserver: Observer<List<MovieModel>>
+    @Mock
+    lateinit var listTvShowObserver: Observer<List<TvShowModel>>
 
     @Before
-    fun setUp() { viewModel = MainFragmentViewModel() }
-
-    @Test
-    fun getTvShows() {
-//        val data = mutableListOf<TvShowModel>(
-//            TvShowModel(
-//                original_name = "Arrow",
-//                overview = "Spoiled billionaire playboy Oliver Queen is missing and presumed dead when his yacht is lost at sea. He returns five years later a changed man, determined to clean up the city as a hooded vigilante armed with a bow.",
-//                genre_ids = listOf("80", "18", "9648", "10759"),
-//                original_language = "en",
-//                backdrop_path = "/dKxkwAJfGuznW8Hu0mhaDJtna0n.jpg",
-//                id = "1412",
-//                poster_path = "/mo0FP1GxOFZT4UDde7RFDz5APXF.jpg",
-//                vote_average = "5.8",
-//                vote_count = "2729",
-//                popularity = "365.616",
-//                first_air_date = "2012-10-10",
-//                name = "Arrow",
-//                origin_country = listOf("US")
-//        ))
-//        dummyTvShows.postValue(data)
-//        `when`(viewModel.tvShows).thenReturn(dummyTvShows)
-//        assertEquals(dummyTvShows, viewModel.tvShows)
+    fun before() {
+        Dispatchers.setMain(mainThreadSurrogate)
+        MockitoAnnotations.initMocks(this)
+        startKoin {
+            modules(appModules)
+            module { viewModel { viewModel } }
+        }
     }
 
     @Test
-    fun getMovies() {
-//        val data = mutableListOf<MovieModel>(
-//            MovieModel(
-//                popularity = "513.78",
-//                vote_count = "4120",
-//                vote_average = "8.6",
-//                poster_path = "/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg",
-//                id = "475557",
-//                backdrop_path = "/n6bUvigpRFqSwmPp1m2YADdbRBc.jpg",
-//                original_language = "en",
-//                genre_ids = listOf("80", "18", "53"),
-//                overview = "During the 1980s, a failed stand-up comedian is driven insane and turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.",
-//                title = "Joker",
-//                release_date = "2019-10-04",
-//                adult = "false",
-//                video = false,
-//                orginal_title = "Joker"
-//            )
-//        )
-//        dummyMovies.postValue(data)
-//        `when`(viewModel.movies).thenReturn(dummyMovies)
-//        assertEquals(dummyMovies, viewModel.movies)
+    fun getMovieList() {
+        viewModel.movies.observeForever(listMovieObserver)
+        when (val value = runBlocking { dataRepository.getMovieList() }) {
+            is UseCaseResult.Success<MovieResponse> -> movies = value.data.results
+        }
+        Mockito.verify(listMovieObserver).onChanged(movies)
+    }
+
+    @Test
+    fun getTvShowList() {
+        viewModel.tvShows.observeForever(listTvShowObserver)
+        when (val value = runBlocking { dataRepository.getTvShowList() }) {
+            is UseCaseResult.Success<TvShowResponse> -> tvShows = value.data.results
+        }
+        Mockito.verify(listTvShowObserver).onChanged(tvShows)
     }
 }

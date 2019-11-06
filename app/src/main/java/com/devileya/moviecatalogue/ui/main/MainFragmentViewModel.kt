@@ -1,19 +1,24 @@
 package com.devileya.moviecatalogue.ui.main
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.devileya.moviecatalogue.BuildConfig
-import com.devileya.moviecatalogue.network.ApiInteractor
-import com.devileya.moviecatalogue.network.ApiService
+import com.devileya.moviecatalogue.base.BaseViewModel
+import com.devileya.moviecatalogue.domain.repository.DataRepository
+import com.devileya.moviecatalogue.network.message.response.MovieResponse
+import com.devileya.moviecatalogue.network.message.response.TvShowResponse
 import com.devileya.moviecatalogue.network.model.MovieModel
 import com.devileya.moviecatalogue.network.model.TvShowModel
-import kotlinx.coroutines.*
+import com.devileya.moviecatalogue.utils.EspressoIdlingResource
+import com.devileya.moviecatalogue.utils.SingleLiveEvent
+import com.devileya.moviecatalogue.utils.UseCaseResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
-class MainFragmentViewModel: ViewModel(), CoroutineScope {
+class MainFragmentViewModel(private val dataRepository: DataRepository): BaseViewModel() {
 
-    private val apiServices = ApiService.client.create(ApiInteractor::class.java)
+    val showError = SingleLiveEvent<String>()
     val showLoading = MutableLiveData<Boolean>()
     val tvShows = MutableLiveData<List<TvShowModel>>()
     val movies = MutableLiveData<List<MovieModel>>()
@@ -30,37 +35,24 @@ class MainFragmentViewModel: ViewModel(), CoroutineScope {
     private fun getMovieList() {
         showLoading.value = true
         launch {
-            try {
-                val data = withContext(Dispatchers.Default) { apiServices.getMovieAsync(BuildConfig.API_KEY) }
-                Log.d("datass",data.toString())
-                movies.value = data.results
-                showLoading.value = false
-            } catch (e: java.lang.Exception) {
-                showLoading.value = false
-                Log.e("errorrr", e.message.toString())
+            val response = withContext(Dispatchers.Default) { dataRepository.getMovieList() }
+            showLoading.value = false
+            when (response) {
+                is UseCaseResult.Success<MovieResponse> -> movies.value = response.data.results
+                is UseCaseResult.Error -> showError.value = response.exception.message
             }
         }
     }
 
-//    fun getTvShowList(): List<TvShowModel> = runBlocking { apiServices.getTvAsync(api_key).results }
     private fun getTvShowList() {
         showLoading.value = true
         launch {
-            try {
-                val data =
-                    withContext(Dispatchers.Default) { apiServices.getTvAsync(BuildConfig.API_KEY) }
-                tvShows.value = data.results
-                showLoading.value = false
-            } catch (e: Exception) {
-                showLoading.value = false
-                Log.e("errorrr", e.message.toString())
+            val response = withContext(Dispatchers.Default) { dataRepository.getTvShowList() }
+            showLoading.value = false
+            when (response) {
+                is UseCaseResult.Success<TvShowResponse> -> tvShows.value = response.data.results
+                is UseCaseResult.Error -> showError.value = response.exception.message
             }
         }
-    }
-
-
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
     }
 }

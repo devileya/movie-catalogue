@@ -1,33 +1,33 @@
 package com.devileya.moviecatalogue.ui.detail
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.devileya.moviecatalogue.BuildConfig
 import com.devileya.moviecatalogue.R
 import com.devileya.moviecatalogue.network.model.DetailModel
 import com.devileya.moviecatalogue.ui.main.MainActivity
+import com.devileya.moviecatalogue.utils.EspressoIdlingResource
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import kotlinx.android.synthetic.main.activity_detail.*
+import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class DetailActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: DetailViewModel
+    private val viewModel by viewModel<DetailViewModel>()
     private var youTubePlayerFragment: YouTubePlayerSupportFragment? = null
     private lateinit var youTubePlayer: YouTubePlayer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-
-        viewModel = ViewModelProviders.of(this).get(DetailViewModel::class.java)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -47,9 +47,14 @@ class DetailActivity : AppCompatActivity() {
             .placeholder(R.drawable.img_placeholder)
             .into(iv_poster)
 
+        EspressoIdlingResource.increment()
         viewModel.getVideoTrailer(data.id, type)
-        viewModel.videoResponse.observe(this, Observer {
-            initYoutubePlayer(it.results?.get(0)?.key)
+        viewModel.showLoading.observe(this, Observer {
+            progress_bar_detail.visibility = if (it) View.VISIBLE else View.GONE
+        })
+        viewModel.videos.observe(this, Observer {
+            initYoutubePlayer(it[0].key)
+            EspressoIdlingResource.decrement()
         })
     }
 
@@ -76,7 +81,7 @@ class DetailActivity : AppCompatActivity() {
             }
 
             override fun onInitializationFailure(arg0: YouTubePlayer.Provider, arg1: YouTubeInitializationResult) {
-                Log.e("DetailActivity", "Something went wrong")
+                Timber.e("Something went wrong")
             }
         })
     }
