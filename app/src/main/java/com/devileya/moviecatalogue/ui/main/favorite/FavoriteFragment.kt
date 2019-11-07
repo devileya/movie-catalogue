@@ -1,4 +1,4 @@
-package com.devileya.moviecatalogue.ui.main
+package com.devileya.moviecatalogue.ui.main.favorite
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,30 +10,28 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.devileya.moviecatalogue.R
 import com.devileya.moviecatalogue.network.model.DetailModel
-import com.devileya.moviecatalogue.network.model.MovieModel
-import com.devileya.moviecatalogue.network.model.TvShowModel
 import com.devileya.moviecatalogue.ui.detail.DetailActivity
 import com.devileya.moviecatalogue.utils.DataEnum
 import com.devileya.moviecatalogue.utils.EspressoIdlingResource
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.main_fragment.*
+import kotlinx.android.synthetic.main.favorite_fragment.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class MainFragment : Fragment() {
+class FavoriteFragment : Fragment() {
 
     companion object {
-        fun newInstance(category: String): MainFragment{
+        fun newInstance(category: String): FavoriteFragment {
             val args = Bundle()
-            args.putString(DataEnum.CATEGORY.value, category)
+            args.putString("category", category)
 
-            val fragment = MainFragment()
+            val fragment = FavoriteFragment()
             fragment.arguments = args
 
             return fragment
         }
     }
 
-    private val viewModel by viewModel<MainFragmentViewModel>()
+    private val viewModel by viewModel<FavoriteViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,48 +45,26 @@ class MainFragment : Fragment() {
         initViewModel()
     }
 
-    private fun showMovieList(movies: List<MovieModel>?) {
+    private fun showMovieList(movies: List<DetailModel>?) {
         rv_movie.visibility = View.VISIBLE
         rv_movie.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = ItemMovieAdapter(context!!, movies!!){
-                val detailModel = DetailModel(
-                    id = it.id!!,
-                    title = it.title,
-                    date = it.release_date,
-                    synopsis = it.overview,
-                    rating = it.vote_average,
-                    poster = it.poster_path,
-                    category = DataEnum.MOVIE.value,
-                    popularity = it.popularity
-                )
-
+            adapter = FavoriteAdapter(context!!, movies!!){
                 val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra(DataEnum.DATA.value, detailModel)
+                intent.putExtra(DataEnum.DATA.value, it)
                 startActivity(intent)
                 activity?.finish()
             }
         }
     }
 
-    private fun showTvList(tvShows: List<TvShowModel>?) {
+    private fun showTvList(tvShows: List<DetailModel>?) {
         rv_movie.visibility = View.VISIBLE
         rv_movie.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = ItemTvAdapter(context!!, tvShows!!){
-                val detailModel = DetailModel(
-                    id = it.id,
-                    title = it.name,
-                    date = it.first_air_date,
-                    synopsis = it.overview,
-                    rating = it.vote_average,
-                    poster = it.poster_path,
-                    category = DataEnum.TV.value,
-                    popularity = it.popularity
-                )
-
+            adapter = FavoriteAdapter(context!!, tvShows!!){
                 val intent = Intent(context, DetailActivity::class.java)
-                intent.putExtra(DataEnum.DATA.value, detailModel)
+                intent.putExtra(DataEnum.DATA.value, it)
                 startActivity(intent)
                 activity?.finish()
             }
@@ -118,4 +94,5 @@ class MainFragment : Fragment() {
             Snackbar.make(view!!, it, Snackbar.LENGTH_SHORT)
         })
     }
+
 }

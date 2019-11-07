@@ -39,9 +39,9 @@ class ItemMovieAdapter(
         ) {
             setIsRecyclable(false)
             itemView.tv_title.text = movie.title
-            itemView.tv_popularity.text = "${context.resources.getString(R.string.popularity)}: ${movie.popularity}"
-            itemView.tv_rate.text = "${context.resources.getString(R.string.rating)}: ${movie.vote_average}"
-            itemView.tv_date.text = "${context.resources.getString(R.string.date)}: ${movie.release_date}"
+            itemView.tv_popularity.text = String.format(context.resources.getString(R.string.popularity), movie.popularity)
+            itemView.tv_rate.text = String.format(context.resources.getString(R.string.rating), movie.vote_average)
+            itemView.tv_date.text = String.format(context.resources.getString(R.string.date), movie.release_date)
             Glide.with(context)
                 .load("https://image.tmdb.org/t/p/w154/${movie.poster_path}")
                 .into(itemView.iv_movie)

@@ -6,11 +6,13 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.bumptech.glide.Glide
 import com.devileya.moviecatalogue.BuildConfig
 import com.devileya.moviecatalogue.R
 import com.devileya.moviecatalogue.network.model.DetailModel
 import com.devileya.moviecatalogue.ui.main.MainActivity
+import com.devileya.moviecatalogue.utils.DataEnum
 import com.devileya.moviecatalogue.utils.EspressoIdlingResource
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
@@ -24,6 +26,7 @@ class DetailActivity : AppCompatActivity() {
     private val viewModel by viewModel<DetailViewModel>()
     private var youTubePlayerFragment: YouTubePlayerSupportFragment? = null
     private lateinit var youTubePlayer: YouTubePlayer
+    private var isFavorite = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +36,7 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        val data = intent.getParcelableExtra<DetailModel>("data")
-        val type = intent.getStringExtra("type")
+        val data = intent.getParcelableExtra<DetailModel>(DataEnum.DATA.value)
         toolbar_title.text = data?.title
         iv_poster.z = 5f
         tv_date.text = data?.date
@@ -47,15 +49,14 @@ class DetailActivity : AppCompatActivity() {
             .placeholder(R.drawable.img_placeholder)
             .into(iv_poster)
 
-        EspressoIdlingResource.increment()
-        viewModel.getVideoTrailer(data.id, type)
-        viewModel.showLoading.observe(this, Observer {
-            progress_bar_detail.visibility = if (it) View.VISIBLE else View.GONE
-        })
-        viewModel.videos.observe(this, Observer {
-            initYoutubePlayer(it[0].key)
-            EspressoIdlingResource.decrement()
-        })
+        initViewModel(data)
+
+        btn_favorite.setOnClickListener {
+            when (isFavorite) {
+                true -> viewModel.deleteFavorite(data)
+                false -> viewModel.insertFavorite(data)
+            }
+        }
     }
 
     private fun initYoutubePlayer(key: String?){
@@ -99,5 +100,34 @@ class DetailActivity : AppCompatActivity() {
     override fun onBackPressed() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
+    }
+
+    private fun initViewModel(data: DetailModel){
+        EspressoIdlingResource.increment()
+        viewModel.getFavoriteById(data.id)
+        viewModel.getVideoTrailer(data.id, data.category)
+
+        viewModel.favorite.observe(this, Observer {
+            if (it != null) {
+                isFavorite = true
+                val ivAnimation = AnimatedVectorDrawableCompat.create(iv_heart.context, R.drawable.ic_heart_anim)
+                iv_heart.setImageDrawable(ivAnimation)
+                ivAnimation?.start()
+                iv_heart.imageTintList = getColorStateList(R.color.red)
+            } else {
+                iv_heart.setImageDrawable(getDrawable(R.drawable.ic_heart))
+                iv_heart.imageTintList = getColorStateList(R.color.grey)
+                isFavorite = false
+        }
+        })
+
+        viewModel.showLoading.observe(this, Observer {
+            progress_bar_detail.visibility = if (it) View.VISIBLE else View.GONE
+        })
+
+        viewModel.videos.observe(this, Observer {
+            initYoutubePlayer(it[0].key)
+            EspressoIdlingResource.decrement()
+        })
     }
 }

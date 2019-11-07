@@ -2,6 +2,7 @@ package com.devileya.moviecatalogue
 
 import android.app.Application
 import com.devileya.moviecatalogue.domain.module.appModules
+import com.facebook.stetho.Stetho
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -15,8 +16,8 @@ class MovieCatalogueApplication: Application() {
         super.onCreate()
 
         if (BuildConfig.DEBUG) {
-            // Timber
             Timber.plant(Timber.DebugTree())
+            Stetho.initializeWithDefaults(this)
         }
 
         startKoin {

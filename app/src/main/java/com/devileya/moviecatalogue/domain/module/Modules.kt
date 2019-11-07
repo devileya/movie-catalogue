@@ -1,13 +1,18 @@
 package com.devileya.moviecatalogue.domain.module
 
+import com.devileya.moviecatalogue.database.AppDatabase
 import com.devileya.moviecatalogue.domain.repository.DataRepository
+import com.devileya.moviecatalogue.domain.repository.FavoriteRepository
 import com.devileya.moviecatalogue.network.ApiInteractor
 import com.devileya.moviecatalogue.network.repository.DataRepositoryImpl
+import com.devileya.moviecatalogue.network.repository.FavoriteRepositoryImpl
 import com.devileya.moviecatalogue.ui.detail.DetailViewModel
 import com.devileya.moviecatalogue.ui.main.MainFragmentViewModel
+import com.devileya.moviecatalogue.ui.main.favorite.FavoriteViewModel
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
+import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -26,10 +31,18 @@ val appModules =  module {
             baseUrl = URL)
     }
 
+    factory { AppDatabase.getAppDataBase(androidContext())!! }
+
     // Main Fragment
     factory<DataRepository> { DataRepositoryImpl(get()) }
     viewModel { MainFragmentViewModel(get()) }
-    viewModel { DetailViewModel(get()) }
+
+    // Detail Activity
+    factory<FavoriteRepository> { FavoriteRepositoryImpl(get()) }
+    viewModel { DetailViewModel(get(), get()) }
+
+    // Favorite
+    viewModel { FavoriteViewModel(get()) }
 }
 
 fun createHttpClient(): OkHttpClient {

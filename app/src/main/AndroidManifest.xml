@@ -12,13 +12,15 @@
     <application
         android:name=".MovieCatalogueApplication"
         android:allowBackup="true"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.detail.DetailActivity"/>
+        <activity android:name=".ui.main.favorite.FavoriteActivity"></activity>
+        <activity android:name=".ui.detail.DetailActivity" />
         <activity android:name=".ui.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -3,8 +3,10 @@
     <string name="app_name">Katalog Film</string>
     <string name="movies">Film</string>
     <string name="tv_shows">Acara TV</string>
-    <string name="popularity">popularitas</string>
-    <string name="rating">penilaian</string>
-    <string name="date">tanggal</string>
+    <string name="popularity">popularitas: %s</string>
+    <string name="rating">penilaian: %s</string>
+    <string name="date">tanggal: %s</string>
     <string name="change_language_settings">Ubah Pengaturan Bahasa</string>
+    <string name="favorite">kesukaan</string>
+    <string name="no_data">Tidak Ada Data</string>
 </resources>

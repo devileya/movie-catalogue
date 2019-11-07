@@ -2,8 +2,10 @@
     <string name="app_name">Movie Catalogue</string>
     <string name="movies">Movies</string>
     <string name="tv_shows">TV Shows</string>
-    <string name="popularity">popularity</string>
-    <string name="rating">rating</string>
-    <string name="date">date</string>
+    <string name="popularity" translatable="false">popularity: %s</string>
+    <string name="rating">rating: %s</string>
+    <string name="date">date: %s</string>
     <string name="change_language_settings">Change Language Settings</string>
+    <string name="favorite">favorite</string>
+    <string name="no_data">No Data</string>
 </resources>
