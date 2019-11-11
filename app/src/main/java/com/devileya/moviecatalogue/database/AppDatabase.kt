@@ -16,18 +16,16 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun favoriteDao(): FavoriteDao
 
     companion object {
-        var INSTANCE: AppDatabase? = null
+        private var INSTANCE: AppDatabase? = null
         fun getAppDataBase(context: Context): AppDatabase? {
             if (INSTANCE == null){
                 synchronized(AppDatabase::class){
-                    INSTANCE = Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, "movieDB")
+                    INSTANCE = Room.databaseBuilder(context, AppDatabase::class.java, "movieDB")
                         .fallbackToDestructiveMigration()
                         .build()
                 }
             }
             return INSTANCE
         }
-
-        fun destroyDataBase() { INSTANCE = null }
     }
 }

@@ -1,5 +1,6 @@
 package com.devileya.moviecatalogue.ui.main
 
+import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.devileya.moviecatalogue.domain.module.appModules
@@ -18,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -52,6 +54,7 @@ class MainFragmentViewModelTest : AutoCloseKoinTest() {
         MockitoAnnotations.initMocks(this)
         startKoin {
             modules(appModules)
+            androidContext(Mockito.mock(Context::class.java))
             module { viewModel { viewModel } }
         }
     }
