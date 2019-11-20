@@ -22,12 +22,12 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
-import org.koin.test.check.checkModules
 import org.koin.test.inject
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.MockitoAnnotations
+import org.mockito.junit.MockitoJUnit
 
 /**
  * Created by Arif Fadly Siregar 2019-11-07.
@@ -42,6 +42,7 @@ class DetailViewModelTest : AutoCloseKoinTest() {
     private val category = "movie"
     private val movieId = "475557"
     private val favoriteId = "1"
+    private val verificationCollector = MockitoJUnit.collector()
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -64,6 +65,7 @@ class DetailViewModelTest : AutoCloseKoinTest() {
 
     @Test
     fun getVideos() {
+        verificationCollector.assertLazily()
         viewModel.videos.observeForever(listVideoObserver)
         viewModel.getVideoTrailer(movieId, category)
         when (val value = runBlocking { dataRepository.getVideo(movieId, category) }) {
@@ -74,6 +76,7 @@ class DetailViewModelTest : AutoCloseKoinTest() {
 
     @Test
     fun getFavorite() {
+        verificationCollector.assertLazily()
         viewModel.favorite.observeForever(favoriteObserver)
         viewModel.getFavoriteById(favoriteId)
         when (val value = runBlocking { favoriteRepository.getFavoriteById(favoriteId) }) {

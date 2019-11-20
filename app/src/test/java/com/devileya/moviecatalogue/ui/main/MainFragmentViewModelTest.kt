@@ -28,6 +28,7 @@ import org.koin.test.inject
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
+import org.mockito.junit.MockitoJUnit
 
 /**
  * Created by Arif Fadly Siregar 2019-10-27.
@@ -39,6 +40,7 @@ class MainFragmentViewModelTest : AutoCloseKoinTest() {
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
     private var movies: List<MovieModel>? = null
     private var tvShows: List<TvShowModel>? = null
+    private val verificationCollector = MockitoJUnit.collector()
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -47,6 +49,7 @@ class MainFragmentViewModelTest : AutoCloseKoinTest() {
     lateinit var listMovieObserver: Observer<List<MovieModel>>
     @Mock
     lateinit var listTvShowObserver: Observer<List<TvShowModel>>
+
 
     @Before
     fun before() {
@@ -61,6 +64,7 @@ class MainFragmentViewModelTest : AutoCloseKoinTest() {
 
     @Test
     fun getMovieList() {
+        verificationCollector.assertLazily()
         viewModel.movies.observeForever(listMovieObserver)
         when (val value = runBlocking { dataRepository.getMovieList() }) {
             is UseCaseResult.Success<MovieResponse> -> movies = value.data.results
@@ -70,6 +74,7 @@ class MainFragmentViewModelTest : AutoCloseKoinTest() {
 
     @Test
     fun getTvShowList() {
+        verificationCollector.assertLazily()
         viewModel.tvShows.observeForever(listTvShowObserver)
         when (val value = runBlocking { dataRepository.getTvShowList() }) {
             is UseCaseResult.Success<TvShowResponse> -> tvShows = value.data.results

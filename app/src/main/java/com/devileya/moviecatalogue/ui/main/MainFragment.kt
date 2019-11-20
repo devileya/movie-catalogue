@@ -51,7 +51,7 @@ class MainFragment : Fragment() {
         rv_movie.visibility = View.VISIBLE
         rv_movie.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = ItemMovieAdapter(context!!, movies!!){
+            adapter = ItemMovieAdapter(movies!!){
                 val detailModel = DetailModel(
                     id = it.id!!,
                     title = it.title,
@@ -75,7 +75,7 @@ class MainFragment : Fragment() {
         rv_movie.visibility = View.VISIBLE
         rv_movie.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = ItemTvAdapter(context!!, tvShows!!){
+            adapter = ItemTvAdapter(tvShows!!){
                 val detailModel = DetailModel(
                     id = it.id,
                     title = it.name,
