@@ -7,5 +7,8 @@ enum class DataEnum(val value: String) {
     MOVIE("movie"),
     TV("tv"),
     DATA("data"),
-    CATEGORY("category")
+    CATEGORY("category"),
+    FAVORITE("favorite"),
+    DAILY("daily"),
+    RELEASE("release")
 }

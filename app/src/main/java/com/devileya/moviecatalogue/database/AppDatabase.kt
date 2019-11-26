@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.devileya.moviecatalogue.database.dao.FavoriteDao
 import com.devileya.moviecatalogue.network.model.DetailModel
+import com.devileya.moviecatalogue.utils.DataEnum
 
 /**
  * Created by Arif Fadly Siregar 2019-11-07.
@@ -20,7 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
         fun getAppDataBase(context: Context): AppDatabase? {
             if (INSTANCE == null){
                 synchronized(AppDatabase::class){
-                    INSTANCE = Room.databaseBuilder(context, AppDatabase::class.java, "movieDB")
+                    INSTANCE = Room.databaseBuilder(context, AppDatabase::class.java, DataEnum.FAVORITE.value)
                         .fallbackToDestructiveMigration()
                         .build()
                 }

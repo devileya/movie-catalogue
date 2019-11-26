@@ -9,4 +9,10 @@
     <string name="change_language_settings">Ubah Pengaturan Bahasa</string>
     <string name="favorite">kesukaan</string>
     <string name="no_data">Tidak Ada Data</string>
+    <string name="notification_new_release">Notifikasi Rilisan Terbaru</string>
+    <string name="notify_new_release">Ingatkan saya ketika ada rilis film atau acara tv baru</string>
+    <string name="notification_setting_title">Pengaturan Notifikasi</string>
+    <string name="notification_daily">Notifikasi Harian</string>
+    <string name="notify_daily">Ingatkan saya untuk kembali ke aplikasi setiap hari</string>
+    <string name="notify_daily_msg">Hai! Kami Merindukanmu</string>
 </resources>

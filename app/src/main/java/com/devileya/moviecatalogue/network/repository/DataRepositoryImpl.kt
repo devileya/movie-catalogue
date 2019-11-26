@@ -37,4 +37,13 @@ class DataRepositoryImpl(private val apiInteractor: ApiInteractor): DataReposito
             UseCaseResult.Error(e)
         }
     }
+
+    override suspend fun getReleaseMovie(currentDate: String?): UseCaseResult<MovieResponse> {
+        return try {
+            val data = apiInteractor.getReleaseMovieAsync(currentDate).await()
+            UseCaseResult.Success(data)
+        } catch (e: Exception) {
+            UseCaseResult.Error(e)
+        }
+    }
 }

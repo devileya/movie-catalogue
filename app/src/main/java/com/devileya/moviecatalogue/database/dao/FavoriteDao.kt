@@ -1,5 +1,6 @@
 package com.devileya.moviecatalogue.database.dao
 
+import android.database.Cursor
 import androidx.room.*
 import com.devileya.moviecatalogue.network.model.DetailModel
 
@@ -9,20 +10,29 @@ import com.devileya.moviecatalogue.network.model.DetailModel
 @Dao
 interface FavoriteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(detail: DetailModel)
+    fun insert(detail: DetailModel): Long
 
     @Delete
     fun delete(detail: DetailModel)
 
     @Update
-    suspend fun update(detail: DetailModel)
+    fun update(detail: DetailModel): Int
+
+    @Query("DELETE FROM favorite WHERE id = :id")
+    fun deleteById(id: String) : Int
 
     @Query("SELECT * FROM favorite WHERE id = :id")
     fun getById(id: String): DetailModel
 
     @Query("SELECT * FROM favorite WHERE id = :id and category = :category")
-    suspend fun getByIdCategory(id: String, category: String): DetailModel
+    fun getByIdCategory(id: String, category: String): DetailModel
 
     @Query("SELECT * FROM favorite WHERE category = :category")
-    suspend fun getByCategory(category: String): List<DetailModel>
+    fun getByCategory(category: String): List<DetailModel>
+
+    @Query("SELECT * FROM Favorite")
+    fun getCursor(): Cursor
+
+    @Query("SELECT * FROM Favorite WHERE id = :id")
+    fun getCursorById(id: String): Cursor
 }

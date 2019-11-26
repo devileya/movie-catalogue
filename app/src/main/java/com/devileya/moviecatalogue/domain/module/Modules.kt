@@ -31,7 +31,7 @@ val appModules =  module {
             baseUrl = URL)
     }
 
-    factory { AppDatabase.getAppDataBase(androidContext())!! }
+    factory { AppDatabase.getAppDataBase(androidContext())?.favoriteDao() }
 
     // Main Fragment
     factory<DataRepository> { DataRepositoryImpl(get()) }
