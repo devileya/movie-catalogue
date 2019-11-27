@@ -1,5 +1,7 @@
 package com.devileya.moviecatalogue.domain.repository
 
+import androidx.lifecycle.LiveData
+import androidx.paging.PagedList
 import com.devileya.moviecatalogue.network.model.DetailModel
 import com.devileya.moviecatalogue.utils.UseCaseResult
 
@@ -16,4 +18,6 @@ interface FavoriteRepository {
     suspend fun delete(detailModel: DetailModel)
     suspend fun getFavoriteById(id: String): UseCaseResult<DetailModel>
     suspend fun get(): UseCaseResult<List<DetailModel>>
+    suspend fun getMoviesResources(): UseCaseResult<LiveData<PagedList<DetailModel>>>
+    suspend fun getTvResources(): UseCaseResult<LiveData<PagedList<DetailModel>>>
 }

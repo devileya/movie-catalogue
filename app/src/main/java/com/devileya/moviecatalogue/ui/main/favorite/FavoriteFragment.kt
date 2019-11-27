@@ -17,10 +17,17 @@ import com.devileya.moviecatalogue.utils.DataEnum
 import com.devileya.moviecatalogue.utils.EspressoIdlingResource
 import com.devileya.moviecatalogue.utils.widget.ImageBannerWidget
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.favorite_fragment.*
+import kotlinx.android.synthetic.main.favorite_fragment.progress_bar
+import kotlinx.android.synthetic.main.favorite_fragment.rv_movie
 import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 class FavoriteFragment : Fragment() {
+
+    private lateinit var movieAdapter: FavoritePagedAdapter
+    private lateinit var tvAdapter: FavoritePagedAdapter
 
     companion object {
         fun newInstance(category: String): FavoriteFragment {
@@ -45,6 +52,21 @@ class FavoriteFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        movieAdapter = FavoritePagedAdapter {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra(DataEnum.DATA.value, it)
+            startActivity(intent)
+            activity?.finish()
+        }
+
+        tvAdapter = FavoritePagedAdapter {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra(DataEnum.DATA.value, it)
+            startActivity(intent)
+            activity?.finish()
+        }
+
         initViewModel()
     }
 
@@ -78,13 +100,25 @@ class FavoriteFragment : Fragment() {
         EspressoIdlingResource.increment()
         val category = arguments?.getString(DataEnum.CATEGORY.value)
         if (category == context?.resources?.getString(R.string.tv_shows)) {
-            viewModel.tvShows.observe(this, Observer {
-                if (it.isNotEmpty()) showTvList(it) else tv_no_data.visibility = View.VISIBLE
+//            viewModel.tvShows.observe(this, Observer {
+//                if (it.isNotEmpty()) showTvList(it) else tv_no_data.visibility = View.VISIBLE
+//                EspressoIdlingResource.decrement()
+//            })
+            viewModel.tvShowsPagination?.observe(this, Observer {
+                Timber.d("tv data $it")
+                tvAdapter.submitList(it)
+                rv_tv.adapter = tvAdapter
                 EspressoIdlingResource.decrement()
             })
         } else {
-            viewModel.movies.observe(this, Observer {
-                if (it.isNotEmpty()) showMovieList(it) else tv_no_data.visibility = View.VISIBLE
+//            viewModel.movies.observe(this, Observer {
+//                if (it.isNotEmpty()) showMovieList(it)
+//                EspressoIdlingResource.decrement()
+//            })
+            viewModel.moviesPagination?.observe(this, Observer {
+                Timber.d("movie data ${it.snapshot()}")
+                movieAdapter.submitList(it)
+                rv_movie.adapter = movieAdapter
                 EspressoIdlingResource.decrement()
             })
         }

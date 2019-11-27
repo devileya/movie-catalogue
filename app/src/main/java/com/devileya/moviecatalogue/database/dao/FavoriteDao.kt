@@ -1,6 +1,7 @@
 package com.devileya.moviecatalogue.database.dao
 
 import android.database.Cursor
+import androidx.paging.DataSource
 import androidx.room.*
 import com.devileya.moviecatalogue.network.model.DetailModel
 
@@ -29,6 +30,9 @@ interface FavoriteDao {
 
     @Query("SELECT * FROM favorite WHERE category = :category")
     fun getByCategory(category: String): List<DetailModel>
+
+    @Query("SELECT * FROM favorite WHERE category = :category")
+    fun getByCategoryResource(category: String): DataSource.Factory<Int, DetailModel>
 
     @Query("SELECT * FROM favorite")
     fun getCursor(): Cursor

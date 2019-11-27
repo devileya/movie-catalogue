@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.list_item_movie.view.*
  * Created by Arif Fadly Siregar 2019-11-08.
  */
 class FavoriteAdapter(
-    private val context: Context, val favorites: List<DetailModel>, val listener: (DetailModel) -> Unit)
+    private val context: Context, private val favorites: List<DetailModel>, private val listener: (DetailModel) -> Unit)
     : androidx.recyclerview.widget.RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>()
 {
 
