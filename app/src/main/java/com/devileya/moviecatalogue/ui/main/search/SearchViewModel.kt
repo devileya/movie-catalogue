@@ -1,4 +1,4 @@
-package com.devileya.moviecatalogue.ui.main
+package com.devileya.moviecatalogue.ui.main.search
 
 import androidx.lifecycle.MutableLiveData
 import com.devileya.moviecatalogue.base.BaseViewModel
@@ -17,7 +17,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
-class MainFragmentViewModel(private val dataRepository: DataRepository, private val favoriteRepository: FavoriteRepository): BaseViewModel() {
+/**
+ * Created by Arif Fadly Siregar 2019-11-27.
+ */
+class SearchViewModel(private val dataRepository: DataRepository, private val favoriteRepository: FavoriteRepository): BaseViewModel() {
 
     val showError = SingleLiveEvent<String>()
     val showLoading = MutableLiveData<Boolean>()
@@ -28,14 +31,7 @@ class MainFragmentViewModel(private val dataRepository: DataRepository, private 
     private val job = Job()
     override val coroutineContext: CoroutineContext = job + Dispatchers.Main
 
-    init {
-        getMovieList()
-        getTvShowList()
-        getFavorite()
-    }
-
-
-    private fun getMovieList() {
+    fun searchMovie(keyword: String) {
         showLoading.value = true
         launch {
             val response = withContext(Dispatchers.Default) { dataRepository.getMovieList() }
@@ -47,7 +43,7 @@ class MainFragmentViewModel(private val dataRepository: DataRepository, private 
         }
     }
 
-    private fun getTvShowList() {
+    fun searchTVShows(keyword: String) {
         showLoading.value = true
         launch {
             val response = withContext(Dispatchers.Default) { dataRepository.getTvShowList() }
@@ -55,18 +51,6 @@ class MainFragmentViewModel(private val dataRepository: DataRepository, private 
             when (response) {
                 is UseCaseResult.Success<TvShowResponse> -> tvShows.value = response.data.results
                 is UseCaseResult.Error -> showError.value = response.exception.message
-            }
-        }
-    }
-
-    private fun getFavorite() {
-        showLoading.value = true
-        launch {
-            val result = withContext(Dispatchers.Default) { favoriteRepository.getTvShows()}
-            showLoading.value = false
-            when (result) {
-                is UseCaseResult.Success<List<DetailModel>> -> favorites.value = result.data
-                is UseCaseResult.Error -> showError.value = result.exception.message
             }
         }
     }

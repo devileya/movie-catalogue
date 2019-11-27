@@ -8,8 +8,16 @@ import android.database.Cursor
 import android.net.Uri
 import com.devileya.moviecatalogue.database.AppDatabase
 import com.devileya.moviecatalogue.database.DatabaseContract.AUTHORITY
+import com.devileya.moviecatalogue.database.DatabaseContract.FavColumns.Companion.CATEGORY
 import com.devileya.moviecatalogue.database.DatabaseContract.FavColumns.Companion.CONTENT_URI
+import com.devileya.moviecatalogue.database.DatabaseContract.FavColumns.Companion.DATE
+import com.devileya.moviecatalogue.database.DatabaseContract.FavColumns.Companion.ID
+import com.devileya.moviecatalogue.database.DatabaseContract.FavColumns.Companion.POPULARITY
+import com.devileya.moviecatalogue.database.DatabaseContract.FavColumns.Companion.POSTER
+import com.devileya.moviecatalogue.database.DatabaseContract.FavColumns.Companion.RATE
+import com.devileya.moviecatalogue.database.DatabaseContract.FavColumns.Companion.SYNOPSIS
 import com.devileya.moviecatalogue.database.DatabaseContract.FavColumns.Companion.TABLE_NAME
+import com.devileya.moviecatalogue.database.DatabaseContract.FavColumns.Companion.TITLE
 import com.devileya.moviecatalogue.network.model.DetailModel
 import com.devileya.moviecatalogue.utils.DataEnum
 
@@ -88,13 +96,13 @@ class FavoriteContentProvider: ContentProvider() {
 
     private fun fromContentValues(values: ContentValues): DetailModel {
         return DetailModel(
-            id = if (values.containsKey("id"))values.getAsString("id") else "",
-            poster = if (values.containsKey("poster"))values.getAsString("poster") else "",
-            synopsis = if (values.containsKey("synopsis"))values.getAsString("synopsis") else "",
-            rating = if (values.containsKey("rate"))values.getAsString("rate") else "",
-            title = if (values.containsKey("title"))values.getAsString("title") else "",
-            category = if (values.containsKey("category"))values.getAsString("category") else "",
-            date = if (values.containsKey("date"))values.getAsString("date") else "",
-            popularity = if (values.containsKey("date"))values.getAsString("popularity") else "")
+            id = if (values.containsKey(ID))values.getAsString(ID) else "",
+            poster = if (values.containsKey(POSTER))values.getAsString(POSTER) else "",
+            synopsis = if (values.containsKey(SYNOPSIS))values.getAsString(SYNOPSIS) else "",
+            rating = if (values.containsKey(RATE))values.getAsString(RATE) else "",
+            title = if (values.containsKey(TITLE))values.getAsString(TITLE) else "",
+            category = if (values.containsKey(CATEGORY))values.getAsString(CATEGORY) else "",
+            date = if (values.containsKey(DATE))values.getAsString(DATE) else "",
+            popularity = if (values.containsKey(POPULARITY))values.getAsString(POPULARITY) else "")
     }
 }

@@ -22,6 +22,7 @@ class ItemMovieAdapter(val movies: List<MovieModel>, val listener: (MovieModel) 
         override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
             holder.setIsRecyclable(false)
             holder.bindItem(movies[position], listener)
+//            notifyDataSetChanged()
         }
 
         override fun getItemCount(): Int = movies.size

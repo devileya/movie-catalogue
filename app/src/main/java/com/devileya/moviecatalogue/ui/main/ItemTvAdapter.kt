@@ -1,6 +1,5 @@
 package com.devileya.moviecatalogue.ui.main
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import com.devileya.moviecatalogue.network.model.TvShowModel
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.list_item_movie.view.*
 
-class ItemTvAdapter(val tvShows: List<TvShowModel>, val listener: (TvShowModel) -> Unit)
+class ItemTvAdapter(private val tvShows: List<TvShowModel>, private val listener: (TvShowModel) -> Unit)
     : androidx.recyclerview.widget.RecyclerView.Adapter<ItemTvAdapter.MovieViewHolder>()
 {
 
@@ -23,6 +22,7 @@ class ItemTvAdapter(val tvShows: List<TvShowModel>, val listener: (TvShowModel) 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.setIsRecyclable(false)
         holder.bindItem(tvShows[position], listener)
+//        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = tvShows.size

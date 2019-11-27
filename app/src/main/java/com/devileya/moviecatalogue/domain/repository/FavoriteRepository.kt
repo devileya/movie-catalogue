@@ -15,4 +15,5 @@ interface FavoriteRepository {
     suspend fun update(detailModel: DetailModel)
     suspend fun delete(detailModel: DetailModel)
     suspend fun getFavoriteById(id: String): UseCaseResult<DetailModel>
+    suspend fun get(): UseCaseResult<List<DetailModel>>
 }

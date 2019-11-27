@@ -1,5 +1,7 @@
 package com.devileya.moviecatalogue.ui.detail
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -14,6 +16,7 @@ import com.devileya.moviecatalogue.network.model.DetailModel
 import com.devileya.moviecatalogue.ui.main.MainActivity
 import com.devileya.moviecatalogue.utils.DataEnum
 import com.devileya.moviecatalogue.utils.EspressoIdlingResource
+import com.devileya.moviecatalogue.utils.widget.ImageBannerWidget
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
 import com.google.android.youtube.player.YouTubePlayerSupportFragment
@@ -36,12 +39,13 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
+
         val data = intent.getParcelableExtra<DetailModel>(DataEnum.DATA.value)
         toolbar_title.text = data?.title
         iv_poster.z = 5f
         tv_date.text = data?.date
         tv_synopsis.text = data?.synopsis
-        val rating = (data?.rating!!.toFloat()*10).toInt()
+        val rating =  if (data?.rating != null) (data.rating.toFloat()*10).toInt() else 0
         tv_score.text = String.format("%s%%", rating)
         rb_score.rating = (rating/20f)
         Glide.with(this)
@@ -119,6 +123,16 @@ class DetailActivity : AppCompatActivity() {
                 iv_heart.imageTintList = getColorStateList(R.color.grey)
                 isFavorite = false
         }
+
+            val intent = Intent(this, ImageBannerWidget::class.java)
+            intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+            val appWidgetManager = AppWidgetManager.getInstance(this)
+            val ids = appWidgetManager.getAppWidgetIds(
+                ComponentName(this, ImageBannerWidget::class.java)
+            )
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+            sendBroadcast(intent)
+            appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.stack_view)
         })
 
         viewModel.showLoading.observe(this, Observer {
@@ -127,7 +141,7 @@ class DetailActivity : AppCompatActivity() {
 
         viewModel.videos.observe(this, Observer {
             initYoutubePlayer(it[0].key)
-            EspressoIdlingResource.decrement()
+//            EspressoIdlingResource.decrement()
         })
     }
 }

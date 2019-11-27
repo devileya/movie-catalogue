@@ -71,4 +71,13 @@ class FavoriteRepositoryImpl(private val favoriteDao: FavoriteDao): FavoriteRepo
             UseCaseResult.Error(e)
         }
     }
+
+    override suspend fun get(): UseCaseResult<List<DetailModel>> {
+        return try {
+            val result = favoriteDao.get()
+            UseCaseResult.Success(result)
+        } catch (e: Exception) {
+            UseCaseResult.Error(e)
+        }
+    }
 }

@@ -15,4 +15,11 @@
     <string name="notification_daily">Notifikasi Harian</string>
     <string name="notify_daily">Ingatkan saya untuk kembali ke aplikasi setiap hari</string>
     <string name="notify_daily_msg">Hai! Kami Merindukanmu</string>
+    <string name="hint_search">Cari Film atau acara tv</string>
+    <string name="love_it">Menyukai</string>
+    <string name="no_movie_favorite">Tidak ada film kesukaan</string>
+    <string name="no_tv_show_favorite">Tidak ada acara tv kesukaan</string>
+    <string name="search">Cari</string>
+    <string name="text_btn_search">Cari</string>
+    <string name="title_activity_reminder_settings">Pengaturan Pengingat</string>
 </resources>

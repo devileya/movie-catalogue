@@ -1,5 +1,7 @@
 package com.devileya.moviecatalogue.ui.main
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +17,7 @@ import com.devileya.moviecatalogue.network.model.TvShowModel
 import com.devileya.moviecatalogue.ui.detail.DetailActivity
 import com.devileya.moviecatalogue.utils.DataEnum
 import com.devileya.moviecatalogue.utils.EspressoIdlingResource
+import com.devileya.moviecatalogue.utils.widget.ImageBannerWidget
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.main_fragment.*
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -109,6 +112,16 @@ class MainFragment : Fragment() {
                 EspressoIdlingResource.decrement()
             })
         }
+
+        viewModel.favorites.observe(this, Observer {
+            val intent = Intent(activity, ImageBannerWidget::class.java)
+            intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val ids = appWidgetManager.getAppWidgetIds(ComponentName(context!!, ImageBannerWidget::class.java))
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+            context?.sendBroadcast(intent)
+            appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.stack_view)
+        })
 
         viewModel.showLoading.observe(this, Observer {
             progress_bar.visibility = if (it) View.VISIBLE else View.GONE

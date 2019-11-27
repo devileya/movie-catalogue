@@ -16,10 +16,12 @@ class FavoriteViewModel(private val favoriteRepository: FavoriteRepository) : Ba
     val showLoading = MutableLiveData<Boolean>()
     val tvShows = MutableLiveData<List<DetailModel>>()
     val movies = MutableLiveData<List<DetailModel>>()
+    val favorites = MutableLiveData<List<DetailModel>>()
 
     init {
         getMovieList()
         getTvShowList()
+        getFavorite()
     }
 
 
@@ -43,6 +45,18 @@ class FavoriteViewModel(private val favoriteRepository: FavoriteRepository) : Ba
             when (response) {
                 is UseCaseResult.Success<List<DetailModel>> -> tvShows.value = response.data
                 is UseCaseResult.Error -> showError.value = response.exception.message
+            }
+        }
+    }
+
+    private fun getFavorite() {
+        showLoading.value = true
+        launch {
+            val result = withContext(Dispatchers.Default) { favoriteRepository.get() }
+            showLoading.value = false
+            when (result) {
+                is UseCaseResult.Success<List<DetailModel>> -> favorites.value = result.data
+                is UseCaseResult.Error -> showError.value = result.exception.message
             }
         }
     }

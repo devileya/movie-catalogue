@@ -26,15 +26,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".ui.main.search.SearchActivity"></activity>
+        <activity
+            android:name=".utils.reminder.SettingsActivity"
+            android:label="@string/title_activity_reminder_settings" />
 
         <receiver
             android:name=".utils.reminder.ReminderReceiver"
             android:enabled="true"
             android:exported="false" />
 
-        <activity
-            android:name=".utils.reminder.SettingsActivity"
-            android:label="@string/title_activity_reminder_settings"/>
+        <service
+            android:name=".utils.widget.StackWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver android:name=".utils.widget.ImageBannerWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/image_banner_widget_info" />
+        </receiver>
+
         <activity android:name=".ui.main.favorite.FavoriteActivity" />
         <activity android:name=".ui.detail.DetailActivity" />
         <activity android:name=".ui.main.MainActivity">

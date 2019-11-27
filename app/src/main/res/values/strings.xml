@@ -8,7 +8,14 @@
     <string name="change_language_settings">Change Language Settings</string>
     <string name="favorite">favorite</string>
     <string name="no_data">No Data</string>
-    <string name="title_activity_reminder_settings" translatable="false">Settings</string>
+    <string name="title_activity_reminder_settings">Reminder Settings</string>
+    <string name="hint_search">Search movies or TV shows</string>
+    <string name="no_movie_favorite">There are no favorite movies yet</string>
+    <string name="no_tv_show_favorite">There are no favorite tv shows yet</string>
+    <string name="love_it">Love it</string>
+    <string name="search">Search</string>
+    <string name="text_btn_search">Search</string>
+
 
 
     <!-- Settings -->

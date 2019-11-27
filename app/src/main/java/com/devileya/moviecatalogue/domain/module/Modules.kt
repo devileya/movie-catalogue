@@ -9,6 +9,7 @@ import com.devileya.moviecatalogue.network.repository.FavoriteRepositoryImpl
 import com.devileya.moviecatalogue.ui.detail.DetailViewModel
 import com.devileya.moviecatalogue.ui.main.MainFragmentViewModel
 import com.devileya.moviecatalogue.ui.main.favorite.FavoriteViewModel
+import com.devileya.moviecatalogue.ui.main.search.SearchViewModel
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
@@ -35,7 +36,7 @@ val appModules =  module {
 
     // Main Fragment
     factory<DataRepository> { DataRepositoryImpl(get()) }
-    viewModel { MainFragmentViewModel(get()) }
+    viewModel { MainFragmentViewModel(get(), get()) }
 
     // Detail Activity
     factory<FavoriteRepository> { FavoriteRepositoryImpl(get()) }
@@ -43,6 +44,9 @@ val appModules =  module {
 
     // Favorite
     viewModel { FavoriteViewModel(get()) }
+
+    // Search
+    viewModel { SearchViewModel(get(), get()) }
 }
 
 fun createHttpClient(): OkHttpClient {

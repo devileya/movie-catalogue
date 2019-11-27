@@ -15,4 +15,11 @@
     <string name="notification_daily">Daily Notification</string>
     <string name="notify_daily">Notify me everyday to go back to the app</string>
     <string name="notify_daily_msg">Hey! We Missed You</string>
+    <string name="hint_search">Search movies or TV shows</string>
+    <string name="love_it">Love it</string>
+    <string name="no_movie_favorite">There are no favorite movies yet</string>
+    <string name="no_tv_show_favorite">There are no favorite tv shows yet</string>
+    <string name="search">Search</string>
+    <string name="text_btn_search">Search</string>
+    <string name="title_activity_reminder_settings" translatable="false">Reminder Settings</string>
 </resources>

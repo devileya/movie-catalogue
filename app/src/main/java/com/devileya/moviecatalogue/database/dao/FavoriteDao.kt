@@ -30,9 +30,12 @@ interface FavoriteDao {
     @Query("SELECT * FROM favorite WHERE category = :category")
     fun getByCategory(category: String): List<DetailModel>
 
-    @Query("SELECT * FROM Favorite")
+    @Query("SELECT * FROM favorite")
     fun getCursor(): Cursor
 
-    @Query("SELECT * FROM Favorite WHERE id = :id")
+    @Query("SELECT * FROM favorite WHERE id = :id")
     fun getCursorById(id: String): Cursor
+
+    @Query("SELECT * FROM favorite")
+    fun get(): List<DetailModel>
 }
