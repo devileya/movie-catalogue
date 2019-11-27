@@ -11,6 +11,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,10 +25,7 @@ import com.devileya.moviecatalogue.ui.main.ItemTvAdapter
 import com.devileya.moviecatalogue.utils.DataEnum
 import com.devileya.moviecatalogue.utils.EspressoIdlingResource
 import com.devileya.moviecatalogue.utils.widget.ImageBannerWidget
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.activity_search.rv_movie
-import kotlinx.android.synthetic.main.main_fragment.*
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -88,7 +86,6 @@ class SearchActivity : AppCompatActivity() {
         hideKeyboard(this)
         viewModel.searchMovie(keyWord)
         viewModel.searchTVShows(keyWord)
-        progressBar.visibility = View.VISIBLE
     }
 
     private fun hideKeyboard(activity: Activity) {
@@ -101,10 +98,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun updateWidget(){
-        val intent = Intent(this@SearchActivity, ImageBannerWidget::class.java)
+        val intent = Intent(this, ImageBannerWidget::class.java)
         intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-        val appWidgetManager = AppWidgetManager.getInstance(this@SearchActivity)
-        val ids = appWidgetManager.getAppWidgetIds(ComponentName(this@SearchActivity, ImageBannerWidget::class.java))
+        val appWidgetManager = AppWidgetManager.getInstance(this)
+        val ids = appWidgetManager.getAppWidgetIds(ComponentName(this, ImageBannerWidget::class.java))
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
         sendBroadcast(intent)
         appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.stack_view)
@@ -115,7 +112,7 @@ class SearchActivity : AppCompatActivity() {
         rv_movie.visibility = View.VISIBLE
         rv_movie.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = ItemMovieAdapter(movies!!){
+            movieAdapter = ItemMovieAdapter(movies!!){
                 val detailModel = DetailModel(
                     id = it.id!!,
                     title = it.title,
@@ -132,15 +129,23 @@ class SearchActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
+            adapter = movieAdapter
+            movieAdapter.notifyDataSetChanged()
+
+            tv_text_result_movie.text = String.format("%d movies found", movieAdapter.itemCount)
+            main_content.visibility = if(movieAdapter.itemCount < 1 && tvAdapter.itemCount < 1) View.GONE else View.VISIBLE
+            view_no_data.visibility = if(movieAdapter.itemCount < 1 && tvAdapter.itemCount < 1) View.VISIBLE else View.GONE
+            updateWidget()
+            EspressoIdlingResource.decrement()
         }
     }
 
     private fun showTvList(tvShows: List<TvShowModel>?) {
         rv_tv.isNestedScrollingEnabled = false
-        rv_movie.visibility = View.VISIBLE
-        rv_movie.apply {
+        rv_tv.visibility = View.VISIBLE
+        rv_tv.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = ItemTvAdapter(tvShows!!){
+            tvAdapter = ItemTvAdapter(tvShows!!){
                 val detailModel = DetailModel(
                     id = it.id,
                     title = it.name,
@@ -157,6 +162,14 @@ class SearchActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
+            adapter = tvAdapter
+            tvAdapter.notifyDataSetChanged()
+
+            tv_text_result_tv.text = String.format("%d TV shows found", tvAdapter.itemCount)
+            main_content.visibility = if(movieAdapter.itemCount < 1 && tvAdapter.itemCount < 1) View.GONE else View.VISIBLE
+            view_no_data.visibility = if(movieAdapter.itemCount < 1 && tvAdapter.itemCount < 1) View.VISIBLE else View.GONE
+            updateWidget()
+            EspressoIdlingResource.decrement()
         }
     }
 
@@ -168,24 +181,13 @@ class SearchActivity : AppCompatActivity() {
                 showTvList(it)
                 Timber.d("TvFragment $it")
             }
-            tv_text_result_tv.text = String.format("%d TV shows found", tvAdapter.itemCount)
-            main_content.visibility = if(movieAdapter.itemCount==0 && tvAdapter.itemCount==0) View.GONE else View.VISIBLE
-            view_no_data.visibility = if(movieAdapter.itemCount==0 && tvAdapter.itemCount==0) View.VISIBLE else View.GONE
-            updateWidget()
-                EspressoIdlingResource.decrement()
-            })
+        })
 
         viewModel.movies.observe(this, Observer {
             if (it != null) {
                 showMovieList(it)
-                progressBar.visibility = View.GONE
                 Timber.d("MovieData $it")
             }
-            tv_text_result_movie.text = String.format("%d movies found", movieAdapter.itemCount)
-            main_content.visibility = if(movieAdapter.itemCount==0 && tvAdapter.itemCount==0) View.GONE else View.VISIBLE
-            view_no_data.visibility = if(movieAdapter.itemCount==0 && tvAdapter.itemCount==0) View.VISIBLE else View.GONE
-            updateWidget()
-            EspressoIdlingResource.decrement()
         })
 
         viewModel.showLoading.observe(this, Observer {
@@ -193,7 +195,7 @@ class SearchActivity : AppCompatActivity() {
         })
 
         viewModel.showError.observe(this, Observer {
-            Snackbar.make(root_layout, it, Snackbar.LENGTH_SHORT)
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         })
     }
 }

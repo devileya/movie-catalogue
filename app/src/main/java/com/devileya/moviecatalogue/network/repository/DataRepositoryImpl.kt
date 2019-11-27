@@ -46,4 +46,22 @@ class DataRepositoryImpl(private val apiInteractor: ApiInteractor): DataReposito
             UseCaseResult.Error(e)
         }
     }
+
+    override suspend fun searchMovie(keyWord: String?): UseCaseResult<MovieResponse> {
+        return try {
+            val data = apiInteractor.searchMovieAsync(keyWord).await()
+            UseCaseResult.Success(data)
+        } catch (e: Exception) {
+            UseCaseResult.Error(e)
+        }
+    }
+
+    override suspend fun searchTvShow(keyWord: String?): UseCaseResult<TvShowResponse> {
+        return try {
+            val data = apiInteractor.searchTVAsync(keyWord).await()
+            UseCaseResult.Success(data)
+        } catch (e: Exception) {
+            UseCaseResult.Error(e)
+        }
+    }
 }

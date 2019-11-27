@@ -46,7 +46,7 @@ val appModules =  module {
     viewModel { FavoriteViewModel(get()) }
 
     // Search
-    viewModel { SearchViewModel(get(), get()) }
+    viewModel { SearchViewModel(get()) }
 }
 
 fun createHttpClient(): OkHttpClient {

@@ -219,18 +219,6 @@
     </androidx.core.widget.NestedScrollView>
 
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminateTint="@color/colorPrimary"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone"/>
-
     <LinearLayout
         android:id="@+id/view_no_data"
         android:layout_width="wrap_content"
@@ -264,6 +252,34 @@
             android:text="@string/no_data"
             android:textColor="@color/black"
             android:fontFamily="@font/exo"
-            android:textSize="10sp"/>
+            android:textSize="12sp"/>
     </LinearLayout>
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:visibility="gone"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/colorAccent"
+        app:layout_constraintLeft_toLeftOf="@id/guideline_50_horizontal"
+        app:layout_constraintRight_toRightOf="@id/guideline_50_horizontal"
+        app:layout_constraintTop_toTopOf="@id/guideline_50_vertical"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_50_vertical"
+        app:layout_constraintEnd_toEndOf="@id/guideline_50_horizontal"
+        app:layout_constraintStart_toStartOf="@id/guideline_50_horizontal"/>
+    <!-- Constraint Guideline-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_50_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_50_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.50" />
 </androidx.constraintlayout.widget.ConstraintLayout>

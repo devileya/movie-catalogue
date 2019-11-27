@@ -22,7 +22,6 @@ class ItemTvAdapter(private val tvShows: List<TvShowModel>, private val listener
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.setIsRecyclable(false)
         holder.bindItem(tvShows[position], listener)
-//        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int = tvShows.size
