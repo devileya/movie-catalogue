@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.devileya.moviecatalogue.R
 import com.devileya.moviecatalogue.ui.detail.DetailActivity
 import com.devileya.moviecatalogue.utils.DataEnum
-import com.devileya.moviecatalogue.utils.EspressoIdlingResource
 import com.devileya.moviecatalogue.utils.widget.ImageBannerWidget
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.favorite_fragment.*
@@ -97,15 +96,6 @@ class FavoriteFragment : Fragment() {
         itemTouchHelper.attachToRecyclerView(rv_movie)
 
         initViewModel()
-
-
-
-//        tvAdapter = FavoritePagedAdapter {
-//            val intent = Intent(context, DetailActivity::class.java)
-//            intent.putExtra(DataEnum.DATA.value, it)
-//            startActivity(intent)
-//            activity?.finish()
-//        }
 
     }
 
