@@ -23,6 +23,6 @@
     <string name="notification_new_release">New Release Notification</string>
     <string name="notification_daily">Daily Notification</string>
     <string name="notify_new_release">Notify me when new movie/tv show release</string>
-    <string name="notify_daily">Notify me everyday to go back to the app</string>
+    <string name="notify_daily">Notify me to go back to the app everyday</string>
     <string name="notify_daily_msg">Hey! We Missed You</string>
 </resources>

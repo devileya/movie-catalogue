@@ -2,10 +2,14 @@ package com.devileya.moviecatalogue.ui.main.favorite
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.devileya.moviecatalogue.base.BaseViewModel
 import com.devileya.moviecatalogue.domain.repository.FavoriteRepository
 import com.devileya.moviecatalogue.network.model.DetailModel
+import com.devileya.moviecatalogue.utils.DataEnum
 import com.devileya.moviecatalogue.utils.SingleLiveEvent
 import com.devileya.moviecatalogue.utils.UseCaseResult
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +31,7 @@ class FavoriteViewModel(private val favoriteRepository: FavoriteRepository) : Ba
 //        getMovieList()
 //        getTvShowList()
         getMoviePagination()
-        getTvShowPagination()
+//        getTvShowPagination()
         getFavorite()
     }
 
@@ -58,20 +62,23 @@ class FavoriteViewModel(private val favoriteRepository: FavoriteRepository) : Ba
 
     private fun getMoviePagination() {
         showLoading.value = true
-        launch {
-            val response = withContext(Dispatchers.Default) { favoriteRepository.getMoviesResources() }
-            showLoading.value = false
-            when (response) {
-                is UseCaseResult.Success -> {
-                    Timber.d("movie data ${response.data.value}")
-                    moviesPagination = response.data
-                }
-                is UseCaseResult.Error -> {
-                    Timber.d("movie error ${response.exception.message}")
-                    showError.value = response.exception.message
-                }
-            }
-        }
+//        launch {
+//            val response = withContext(Dispatchers.Default) { favoriteRepository.getMoviesResources() }
+//            showLoading.value = false
+//            when (response) {
+//                is UseCaseResult.Success -> {
+//                    moviesPagination = response.data
+//                    Timber.d("movie data ${moviesPagination?.value?.snapshot()}")
+//                }
+//                is UseCaseResult.Error -> {
+//                    Timber.d("movie error ${response.exception.message}")
+//                    showError.value = response.exception.message
+//                }
+//            }
+//        }
+        val config = (PagedList.Config.Builder()).setPageSize(20).setEnablePlaceholders(false).build()
+        val result = favoriteRepository.getMoviesResources()
+        moviesPagination = LivePagedListBuilder(result, config).build()
     }
 
     private fun getTvShowPagination() {
@@ -81,7 +88,7 @@ class FavoriteViewModel(private val favoriteRepository: FavoriteRepository) : Ba
             showLoading.value = false
             when (response) {
                 is UseCaseResult.Success<LiveData<PagedList<DetailModel>>> -> {
-                    Timber.d("tv data ${response.data}")
+                    Timber.d("tv data ${response.data.value}")
                     tvShowsPagination = response.data
                 }
                 is UseCaseResult.Error -> {
@@ -103,4 +110,16 @@ class FavoriteViewModel(private val favoriteRepository: FavoriteRepository) : Ba
             }
         }
     }
+
+//    private fun initializedPagedListBuilder(config: PagedList.Config):
+//            LivePagedListBuilder<Int, DetailModel> {
+//
+//        val dataSourceFactory = object : DataSource.Factory<Int, DetailModel>() {
+//            override fun create(): DataSource<Int, DetailModel> {
+//                return PostsDataSource(viewModelScope)
+//            }
+//        }
+//        return LivePagedListBuilder<Int, DetailModel>(dataSourceFactory, config)
+//    }
+
 }

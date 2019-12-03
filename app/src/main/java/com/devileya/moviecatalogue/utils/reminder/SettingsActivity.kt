@@ -26,8 +26,8 @@ class SettingsActivity : AppCompatActivity() {
 
         reminderReceiver = ReminderReceiver()
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val releaseRemainderActive = sharedPreferences.getBoolean(DataEnum.RELEASE.value, true)
-        val dailyRemainderActive = sharedPreferences.getBoolean(DataEnum.DAILY.value, true)
+        val releaseRemainderActive = sharedPreferences.getBoolean(DataEnum.RELEASE.value, false)
+        val dailyRemainderActive = sharedPreferences.getBoolean(DataEnum.DAILY.value, false)
 
         switch_release.isChecked = releaseRemainderActive
         switch_daily.isChecked = dailyRemainderActive

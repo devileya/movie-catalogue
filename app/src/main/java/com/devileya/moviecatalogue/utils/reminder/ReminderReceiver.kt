@@ -44,6 +44,7 @@ class ReminderReceiver : BroadcastReceiver(), KoinComponent {
         const val ID_DAILY = 101
 
         private const val TIME_FORMAT = "HH:mm"
+        var CHANNEL_NAME: CharSequence = "movie catalogue channel"
 
     }
 
@@ -214,10 +215,15 @@ class ReminderReceiver : BroadcastReceiver(), KoinComponent {
             .setSound(reminderSound)
             .setContentIntent(pendingIntent)
 
-        builder.setChannelId(channelId)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(channelId,
+                CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT)
+            builder.setChannelId(channelId)
+            notificationManagerCompat.createNotificationChannel(channel)
+        }
 
         val notification = builder.build()
-
         notificationManagerCompat.notify(id, notification)
     }
 }

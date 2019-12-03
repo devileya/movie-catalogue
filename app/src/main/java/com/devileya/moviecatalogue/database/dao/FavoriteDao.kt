@@ -31,7 +31,7 @@ interface FavoriteDao {
     @Query("SELECT * FROM favorite WHERE category = :category")
     fun getByCategory(category: String): List<DetailModel>
 
-    @Query("SELECT * FROM favorite WHERE category = :category")
+    @Query("SELECT * FROM favorite WHERE category = :category order by id")
     fun getByCategoryResource(category: String): DataSource.Factory<Int, DetailModel>
 
     @Query("SELECT * FROM favorite")

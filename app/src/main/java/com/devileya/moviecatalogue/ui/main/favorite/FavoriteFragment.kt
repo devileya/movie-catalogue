@@ -60,6 +60,11 @@ class FavoriteFragment : Fragment() {
             activity?.finish()
         }
 
+        rv_movie.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = movieAdapter
+        }
+
         tvAdapter = FavoritePagedAdapter {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra(DataEnum.DATA.value, it)
@@ -116,9 +121,9 @@ class FavoriteFragment : Fragment() {
 //                EspressoIdlingResource.decrement()
 //            })
             viewModel.moviesPagination?.observe(this, Observer {
-                Timber.d("movie data ${it.snapshot()}")
+                Timber.d("movie datas ${it.size}")
                 movieAdapter.submitList(it)
-                rv_movie.adapter = movieAdapter
+//                rv_movie.adapter = movieAdapter
                 EspressoIdlingResource.decrement()
             })
         }

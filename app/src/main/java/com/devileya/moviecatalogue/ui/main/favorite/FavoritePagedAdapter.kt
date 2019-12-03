@@ -24,7 +24,7 @@ class FavoritePagedAdapter(private val listener: (DetailModel) -> Unit): PagedLi
     }
 
     override fun onBindViewHolder(holder: FavoriteViewHolder, position: Int) {
-        holder.setIsRecyclable(false)
+//        holder.setIsRecyclable(false)
         getItem(position)?.let { holder.bindItem(it, listener) }
     }
 

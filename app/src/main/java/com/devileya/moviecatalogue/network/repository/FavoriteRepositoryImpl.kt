@@ -1,6 +1,7 @@
 package com.devileya.moviecatalogue.network.repository
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.devileya.moviecatalogue.database.dao.FavoriteDao
@@ -84,26 +85,25 @@ class FavoriteRepositoryImpl(private val favoriteDao: FavoriteDao): FavoriteRepo
         }
     }
 
-    override suspend fun getMoviesResources(): UseCaseResult<LiveData<PagedList<DetailModel>>> {
-        return try {
+    override fun getMoviesResources(): DataSource.Factory<Int, DetailModel> {
             val result = favoriteDao.getByCategoryResource(DataEnum.MOVIE.value)
+//            val result = favoriteDao.getByCategory(DataEnum.MOVIE.value)
             val config = PagedList.Config.Builder()
                 .setPageSize(20)
                 .setInitialLoadSizeHint(20 * 2)
                 .setEnablePlaceholders(false)
                 .build()
             val data = LivePagedListBuilder<Int, DetailModel>(result, config).build()
-            Timber.d("movie data ${data.value} ${result}")
-            UseCaseResult.Success(data)
-        } catch (e: Exception) {
-            UseCaseResult.Error(e)
-        }
+            Timber.d("movie data ${data} ${result}")
+        return result
+//            UseCaseResult.Success(data)
     }
 
-    override suspend fun getTvResources(): UseCaseResult<LiveData<PagedList<DetailModel>>> {
+    override fun getTvResources(): UseCaseResult<LiveData<PagedList<DetailModel>>> {
         return try {
+            val config = (PagedList.Config.Builder()).setPageSize(10).build()
             val result = favoriteDao.getByCategoryResource(DataEnum.TV.value)
-            val data = LivePagedListBuilder(result, 20).build()
+            val data = LivePagedListBuilder(result, config).build()
             UseCaseResult.Success(data)
         } catch (e: Exception) {
             UseCaseResult.Error(e)

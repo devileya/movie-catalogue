@@ -94,8 +94,8 @@
                 android:id="@+id/switch_release"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tab_selector"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:checked="false"/>
         </LinearLayout>
 
         <View
@@ -135,8 +135,8 @@
                 android:id="@+id/switch_daily"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/tab_selector"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:checked="false"/>
         </LinearLayout>
 
     </LinearLayout>

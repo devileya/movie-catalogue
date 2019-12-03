@@ -136,8 +136,9 @@ class SearchActivity : AppCompatActivity() {
             main_content.visibility = if(movieAdapter.itemCount < 1 && tvAdapter.itemCount < 1) View.GONE else View.VISIBLE
             view_no_data.visibility = if(movieAdapter.itemCount < 1 && tvAdapter.itemCount < 1) View.VISIBLE else View.GONE
             updateWidget()
-            EspressoIdlingResource.decrement()
         }
+
+        EspressoIdlingResource.decrement()
     }
 
     private fun showTvList(tvShows: List<TvShowModel>?) {
@@ -166,10 +167,9 @@ class SearchActivity : AppCompatActivity() {
             tvAdapter.notifyDataSetChanged()
 
             tv_text_result_tv.text = String.format("%d TV shows found", tvAdapter.itemCount)
-            main_content.visibility = if(movieAdapter.itemCount < 1 && tvAdapter.itemCount < 1) View.GONE else View.VISIBLE
-            view_no_data.visibility = if(movieAdapter.itemCount < 1 && tvAdapter.itemCount < 1) View.VISIBLE else View.GONE
+            main_content.visibility = if(tvAdapter.itemCount < 1 && tvAdapter.itemCount < 1) View.GONE else View.VISIBLE
+            view_no_data.visibility = if(tvAdapter.itemCount < 1 && tvAdapter.itemCount < 1) View.VISIBLE else View.GONE
             updateWidget()
-            EspressoIdlingResource.decrement()
         }
     }
 

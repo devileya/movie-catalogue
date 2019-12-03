@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Top Movie Catalogue</string>
+    <string name="movies">Movies</string>
+    <string name="tv_shows">TV Shows</string>
+    <string name="popularity">popularity: %s</string>
+    <string name="rating">rating: %s</string>
+    <string name="date">date: %s</string>
+    <string name="change_language_settings">Change Language Settings</string>
+    <string name="favorite">favorite</string>
+    <string name="no_data">No Data</string>
+    <string name="title_activity_reminder_settings">Reminder Settings</string>
+    <string name="hint_search">Search movies or TV shows</string>
+    <string name="no_movie_favorite">There are no favorite movies yet</string>
+    <string name="no_tv_show_favorite">There are no favorite tv shows yet</string>
+    <string name="love_it">Love it</string>
+    <string name="search">Search</string>
+    <string name="text_btn_search">Search</string>
+
+
+
+    <!-- Settings -->
+    <string name="notification_setting_title">Notification Settings</string>
+    <string name="notification_new_release">New Release Notification</string>
+    <string name="notification_daily">Daily Notification</string>
+    <string name="notify_new_release">Notify me when new movie/tv show release</string>
+    <string name="notify_daily">Notify me everyday to go back to the app</string>
+    <string name="notify_daily_msg">Hey! We Missed You</string>
+</resources>
