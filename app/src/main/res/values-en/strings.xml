@@ -21,5 +21,7 @@
     <string name="no_tv_show_favorite">There are no favorite tv shows yet</string>
     <string name="search">Search</string>
     <string name="text_btn_search">Search</string>
-    <string name="title_activity_reminder_settings" translatable="false">Reminder Settings</string>
+    <string name="title_activity_reminder_settings">Reminder Settings</string>
+    <string name="message_undo">Do you want to cancel your deleted item?</string>
+    <string name="message_ok">Okay</string>
 </resources>

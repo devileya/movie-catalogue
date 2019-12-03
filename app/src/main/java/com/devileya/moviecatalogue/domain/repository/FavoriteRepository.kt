@@ -20,5 +20,5 @@ interface FavoriteRepository {
     suspend fun getFavoriteById(id: String): UseCaseResult<DetailModel>
     suspend fun get(): UseCaseResult<List<DetailModel>>
     fun getMoviesResources(): DataSource.Factory<Int, DetailModel>
-    fun getTvResources(): UseCaseResult<LiveData<PagedList<DetailModel>>>
+    fun getTvResources(): DataSource.Factory<Int, DetailModel>
 }

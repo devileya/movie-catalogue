@@ -86,27 +86,10 @@ class FavoriteRepositoryImpl(private val favoriteDao: FavoriteDao): FavoriteRepo
     }
 
     override fun getMoviesResources(): DataSource.Factory<Int, DetailModel> {
-            val result = favoriteDao.getByCategoryResource(DataEnum.MOVIE.value)
-//            val result = favoriteDao.getByCategory(DataEnum.MOVIE.value)
-            val config = PagedList.Config.Builder()
-                .setPageSize(20)
-                .setInitialLoadSizeHint(20 * 2)
-                .setEnablePlaceholders(false)
-                .build()
-            val data = LivePagedListBuilder<Int, DetailModel>(result, config).build()
-            Timber.d("movie data ${data} ${result}")
-        return result
-//            UseCaseResult.Success(data)
+        return favoriteDao.getByCategoryResource(DataEnum.MOVIE.value)
     }
 
-    override fun getTvResources(): UseCaseResult<LiveData<PagedList<DetailModel>>> {
-        return try {
-            val config = (PagedList.Config.Builder()).setPageSize(10).build()
-            val result = favoriteDao.getByCategoryResource(DataEnum.TV.value)
-            val data = LivePagedListBuilder(result, config).build()
-            UseCaseResult.Success(data)
-        } catch (e: Exception) {
-            UseCaseResult.Error(e)
-        }
+    override fun getTvResources(): DataSource.Factory<Int, DetailModel> {
+        return favoriteDao.getByCategoryResource(DataEnum.TV.value)
     }
 }

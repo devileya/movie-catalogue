@@ -22,4 +22,6 @@
     <string name="search">Cari</string>
     <string name="text_btn_search">Cari</string>
     <string name="title_activity_reminder_settings">Pengaturan Pengingat</string>
+    <string name="message_undo">Apakah kamu ingin membatalkan item yang terhapus?</string>
+    <string name="message_ok">Oke</string>
 </resources>
