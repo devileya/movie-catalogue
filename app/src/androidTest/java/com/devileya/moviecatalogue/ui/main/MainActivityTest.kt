@@ -27,7 +27,6 @@ class MainActivityTest{
 
     @Before
     fun setUp() {
-        onView(allOf(isDisplayed(), withId(R.id.progress_bar))).check(matches(isDisplayed()))
         IdlingRegistry.getInstance().register(EspressoIdlingResource.espressoIdlingResource)
     }
 

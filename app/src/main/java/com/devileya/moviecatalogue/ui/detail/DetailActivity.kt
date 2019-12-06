@@ -141,7 +141,7 @@ class DetailActivity : AppCompatActivity() {
 
         viewModel.videos.observe(this, Observer {
             initYoutubePlayer(it[0].key)
-//            EspressoIdlingResource.decrement()
+            EspressoIdlingResource.decrement()
         })
     }
 }
