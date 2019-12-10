@@ -12,7 +12,7 @@ interface DataRepository {
     suspend fun getMovieList(): UseCaseResult<MovieResponse>
     suspend fun getTvShowList(): UseCaseResult<TvShowResponse>
     suspend fun getVideo(movieId: String?, category: String?): UseCaseResult<VideoResponse>
-    suspend fun getReleaseMovie(currentDate: String?): UseCaseResult<MovieResponse>
+    suspend fun getReleaseMovie(currentDateGte: String?, currentDateLte: String?): UseCaseResult<MovieResponse>
     suspend fun searchMovie(keyWord: String?): UseCaseResult<MovieResponse>
     suspend fun searchTvShow(keyWord: String?): UseCaseResult<TvShowResponse>
 }

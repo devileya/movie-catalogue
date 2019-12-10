@@ -1,7 +1,6 @@
 package com.devileya.moviecatalogue.ui.main
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.provider.Settings
@@ -12,20 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
-import androidx.preference.PreferenceManager
 import com.devileya.moviecatalogue.R
 import com.devileya.moviecatalogue.ui.main.favorite.FavoriteActivity
 import com.devileya.moviecatalogue.ui.main.search.SearchActivity
-import com.devileya.moviecatalogue.utils.DataEnum
-import com.devileya.moviecatalogue.utils.reminder.ReminderReceiver
 import com.devileya.moviecatalogue.utils.reminder.SettingsActivity
 import kotlinx.android.synthetic.main.main_activity.*
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var reminderReceiver: ReminderReceiver
-    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var viewPagerMovieAdapter: ViewPagerMovieAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,27 +36,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         initViewPager()
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val releaseReminderActive = sharedPreferences.getBoolean(DataEnum.RELEASE.value, true)
-        val dailyReminderActive = sharedPreferences.getBoolean(DataEnum.DAILY.value, true)
-
-        reminderReceiver = ReminderReceiver()
-
-        val isReleaseReminderActive = reminderReceiver.isReminderSet(this, DataEnum.RELEASE.value )
-        val isDailyReminderActive = reminderReceiver.isReminderSet(this, DataEnum.DAILY.value )
-
-        Timber.d("release reminder $isReleaseReminderActive status $releaseReminderActive")
-        Timber.d("daily reminder $isDailyReminderActive status $dailyReminderActive")
-
-
-        if(!isDailyReminderActive && dailyReminderActive){
-            reminderReceiver.setRepeatingReminder(this, DataEnum.DAILY.value,"07:00", resources.getString(R.string.notify_daily_msg))
-        }
-
-        if(!isReleaseReminderActive && releaseReminderActive){
-            reminderReceiver.setRepeatingReminder(this, DataEnum.RELEASE.value,"08:00", resources.getString(R.string.notify_daily_msg))
-        }
     }
 
     private fun initViewPager(){

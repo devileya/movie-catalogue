@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.devileya.moviecatalogue.R
 import com.devileya.moviecatalogue.utils.DataEnum
 import kotlinx.android.synthetic.main.settings_activity.*
+import timber.log.Timber
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -28,25 +29,21 @@ class SettingsActivity : AppCompatActivity() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val releaseRemainderActive = sharedPreferences.getBoolean(DataEnum.RELEASE.value, false)
         val dailyRemainderActive = sharedPreferences.getBoolean(DataEnum.DAILY.value, false)
+        Timber.d("reminder $releaseRemainderActive $dailyRemainderActive")
+        setReleaseReminder(releaseRemainderActive)
+        setDailyReminder(dailyRemainderActive)
 
         switch_release.isChecked = releaseRemainderActive
         switch_daily.isChecked = dailyRemainderActive
 
         switch_release.setOnCheckedChangeListener { _, isChecked ->
             sharedPreferences.edit().putBoolean(DataEnum.RELEASE.value, isChecked).apply()
-            when (isChecked) {
-                true -> reminderReceiver.setRepeatingReminder(this, DataEnum.RELEASE.value, "08:00")
-                false -> reminderReceiver.cancelReminder(this, DataEnum.RELEASE.value)
-            }
-
+            setReleaseReminder(isChecked)
         }
+
         switch_daily.setOnCheckedChangeListener { _, isChecked ->
             sharedPreferences.edit().putBoolean(DataEnum.DAILY.value, isChecked).apply()
-            if (isChecked){
-                reminderReceiver.setRepeatingReminder(this, DataEnum.DAILY.value,"07:00", resources.getString(R.string.notify_daily_msg))
-            }else{
-                reminderReceiver.cancelReminder(this, DataEnum.DAILY.value)
-            }
+            setDailyReminder(isChecked)
         }
     }
 
@@ -58,6 +55,21 @@ class SettingsActivity : AppCompatActivity() {
         }
         else -> {
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun setReleaseReminder(isEnable: Boolean) {
+        when (isEnable) {
+            true -> reminderReceiver.setRepeatingReminder(this, DataEnum.RELEASE.value, "08:00")
+            false -> reminderReceiver.cancelReminder(this, DataEnum.RELEASE.value)
+        }
+    }
+
+    private fun setDailyReminder(isEnable: Boolean) {
+        if (isEnable){
+            reminderReceiver.setRepeatingReminder(this, DataEnum.DAILY.value,"07:00", resources.getString(R.string.notify_daily_msg))
+        }else{
+            reminderReceiver.cancelReminder(this, DataEnum.DAILY.value)
         }
     }
 }

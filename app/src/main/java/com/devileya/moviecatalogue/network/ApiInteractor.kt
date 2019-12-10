@@ -20,8 +20,8 @@ interface ApiInteractor {
     fun getVideoAsync(@Path("category") category: String?,
                       @Path("movieId") movieId: String?): Deferred<VideoResponse>
 
-    @GET("https://api.themoviedb.org/3/discover/movie?api_key=${BuildConfig.API_KEY}&primary_release_date.gte={currentDate}&primary_release_date.lte={currentDate}")
-    fun getReleaseMovieAsync(@Path("currentDate") currentDate: String?): Deferred<MovieResponse>
+    @GET("https://api.themoviedb.org/3/discover/movie?api_key=${BuildConfig.API_KEY}")
+    fun getReleaseMovieAsync(@Query("primary_release_date.gte") currentDateGte: String?, @Query("primary_release_date.lte") currentDateLte: String?): Deferred<MovieResponse>
 
     @GET("https://api.themoviedb.org/3/search/movie?api_key=${BuildConfig.API_KEY}&language=en-US")
     fun searchMovieAsync(@Query("query") keyword: String?): Deferred<MovieResponse>

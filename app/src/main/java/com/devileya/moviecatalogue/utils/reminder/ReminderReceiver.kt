@@ -67,7 +67,7 @@ class ReminderReceiver : BroadcastReceiver(), KoinComponent {
         val currentDate = sdf.format(Date())
         
         GlobalScope.launch {
-            when (val result = dataRepository.getReleaseMovie(currentDate)) {
+            when (val result = dataRepository.getReleaseMovie(currentDate, currentDate)) {
                 is UseCaseResult.Success<MovieResponse> -> {
                     val dataDetail = convertMovieToDetailModel(result.data.results)
                     showReleaseReminderNotification(ctx, dataDetail)
